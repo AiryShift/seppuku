@@ -15,7 +15,7 @@ class SudokuBoard(object):
 
     def solve(self):
         tempBoard = deepcopy(self.board)
-        recurse(0, 0)
+        self.recurse(0, 0)
         self.board, tempBoard = deepcopy(tempBoard), deepcopy(self.board)
         return tempBoard
 
@@ -27,8 +27,8 @@ class SudokuBoard(object):
         i = 0
         exit = False
         while (i < self.BOARD_SIZE and not exit):
-            self.board[y][x] = POSSIBLE_VALUES[i]
-            if is_valid(y, x):
+            self.board[y][x] = self.POSSIBLE_VALUES[i]
+            if self.is_valid(y, x):
                 exit = self.recurse(nextY, nextX)
             i += 1
         return False
@@ -45,13 +45,18 @@ class SudokuBoard(object):
                     return False
                 found.add(i)
         found = {}
-        for i in range(0, BOARD_SIZE):
+        for i in range(0, self.BOARD_SIZE):
             if i != 0:
                 if self.board[i][x] in found:
                     return False
                 found.add(self.board[i][x])
         return True
 
+
+class TestBoard(unittest.TestCase):
+
+    def test_is_valid(self):
+        return True
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
