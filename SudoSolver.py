@@ -38,18 +38,19 @@ class SudokuBoard(object):
         return (coord + 1) % cls.BOARD_SIZE
 
     def is_valid(self, y, x):
-        found = {}
-        for i in self.board[y]:
+        if self.all_unique(i for i in self.board[y]) and self.all_unique(
+                self.board[i][x] for i in range(0, self.BOARD_SIZE)):
+            return True
+        return False
+
+    @staticmethod
+    def all_unique(generator):
+        occurences = {}
+        for i in generator:
             if i != 0:
-                if i in found:
+                if i in occurences:
                     return False
-                found.add(i)
-        found = {}
-        for i in range(0, self.BOARD_SIZE):
-            if i != 0:
-                if self.board[i][x] in found:
-                    return False
-                found.add(self.board[i][x])
+                occurences.add(i)
         return True
 
 
