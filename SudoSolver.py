@@ -31,6 +31,7 @@ class SudokuBoard(object):
             if self.is_valid(y, x):
                 exit = self.recurse(nextY, nextX)
             i += 1
+        self.board[y][x] = 0
         return False
 
     @classmethod
@@ -38,10 +39,13 @@ class SudokuBoard(object):
         return (coord + 1) % cls.BOARD_SIZE
 
     def is_valid(self, y, x):
-        if self.all_unique(i for i in self.board[y]) and self.all_unique(
-                self.board[i][x] for i in range(0, self.BOARD_SIZE)):
-            return True
-        return False
+        row = (i for i in self.board[y])
+        col = (self.board[i][x] for i in range(0, self.BOARD_SIZE))
+        box = (i for i in 0)  # TODO
+        for generator in (row, col, box):
+            if not self.all_unique(generator):
+                return False
+        return True
 
     @staticmethod
     def all_unique(generator):
