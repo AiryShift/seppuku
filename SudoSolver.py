@@ -15,6 +15,9 @@ class SudokuBoard(object):
 
     def solve(self):
         tempBoard = deepcopy(self.board)
+        recurse(0, 0)
+        self.board, tempBoard = deepcopy(tempBoard), deepcopy(self.board)
+        return tempBoard
 
     def recurse(self, y, x):
         if (y == self.BOARD_INDEX and x == self.BOARD_INDEX):
@@ -42,7 +45,7 @@ class SudokuBoard(object):
                     return False
                 found.add(i)
         found = {}
-        for i in range(0, 9):
+        for i in range(0, BOARD_SIZE):
             if i != 0:
                 if self.board[i][x] in found:
                     return False
