@@ -45,7 +45,7 @@ class SudokuBoard(object):
 
     @staticmethod
     def all_unique(generator):
-        occurences = {}
+        occurences = set()
         for i in generator:
             if i != 0:
                 if i in occurences:
@@ -58,6 +58,14 @@ class TestBoard(unittest.TestCase):
 
     def test_is_valid(self):
         return True
+
+    def test_all_unique(self):
+        self.assertTrue(SudokuBoard.all_unique(i for i in [
+            1, 4, 3, 2, 9, 0, 0]))
+        self.assertFalse(SudokuBoard.all_unique(i for i in [
+            0, 0, 0, 1, 1]))
+        self.assertTrue(SudokuBoard.all_unique(i for i in [
+            1, 2, 3, 0, 0, 0]))
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
