@@ -8,7 +8,8 @@ class SudokuBoard(object):
 
     BOARD_SIZE = 9
     BOARD_INDEX = BOARD_SIZE - 1
-    POSSIBLE_VALUES = range(1, 10)
+    POSSIBLE_VALUES = range(1, BOARD_SIZE + 1)
+    UNDETERMINED_VALUE = 0
 
     def __init__(self, board):
         self.board = board
@@ -22,8 +23,7 @@ class SudokuBoard(object):
     def recurse(self, y, x):
         if (y == self.BOARD_INDEX and x == self.BOARD_INDEX):
             return True
-        nextX = self.next_coord(x)
-        nextY = self.next_coord(y)
+        nextX, nextY = self.next_coord(x), self.next_coord(y)
         i = 0
         exit = False
         while (i < self.BOARD_SIZE and not exit):
@@ -31,7 +31,7 @@ class SudokuBoard(object):
             if self.is_valid(y, x):
                 exit = self.recurse(nextY, nextX)
             i += 1
-        self.board[y][x] = 0
+        self.board[y][x] = self.UNDETERMINED_VALUE
         return False
 
     @classmethod
@@ -48,19 +48,21 @@ class SudokuBoard(object):
         return True
 
     @staticmethod
-    def all_unique(generator):
+    @classmethod
+    def all_unique(cls, generator):
         occurences = set()
-        for i in generator:
-            if i != 0:
-                if i in occurences:
+        for value in generator:
+            if value != cls.UNDETERMINED_VALUE:
+                if value in occurences:
                     return False
-                occurences.add(i)
+                occurences.add(value)
         return True
 
 
 class TestBoard(unittest.TestCase):
 
     def setUp(self):
+        self.maxDiff = None
         self.board = SudokuBoard([
             [0, 1, 2, 3, 4, 5, 6, 7, 8],
             [0, 0, 0, 0, 0, 0, 0, 0, 9],
