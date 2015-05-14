@@ -47,10 +47,6 @@ class SudokuBoard(object):
             exit = self.recurse(nextY, nextX)
         return exit
 
-    @classmethod
-    def next_coord(cls, coord):
-        return (coord + 1) % cls.BOARD_SIZE
-
     def is_valid(self, y, x):
         row = (i for i in self.board[y])
         col = (self.board[i][x] for i in range(self.BOARD_SIZE))
@@ -80,6 +76,10 @@ class SudokuBoard(object):
                     return False
                 occurences.add(value)
         return True
+
+    @classmethod
+    def next_coord(cls, coord):
+        return (coord + 1) % cls.BOARD_SIZE
 
 
 class TestBoard(unittest.TestCase):
