@@ -85,9 +85,10 @@ class TestBoard(unittest.TestCase):
             [0, 5, 0, 0, 0, 0, 8, 0, 0]])
 
     def test_is_valid(self):
-        self.assertTrue(self.board.is_valid(0, 8))
+        self.assertFalse(self.board.is_valid(0, 8))
         self.assertFalse(self.board.is_valid(7, 7))
         self.assertFalse(self.board.is_valid(8, 8))
+        self.assertTrue(self.board.is_valid(5, 8))
 
     def test_next_coord(self):
         self.assertEqual(6, SudokuBoard.next_coord(5))
