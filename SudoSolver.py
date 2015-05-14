@@ -26,15 +26,16 @@ class SudokuBoard(object):
                 self.board[y][x] = i
                 if self.is_valid(y, x):
                     return True
+            self.board[y][x] = 0
             return False
 
         nextX = self.next_coord(x)
         nextY = y
-        if nextX == 0:
+        if nextX == 0:  # Step down a row
             nextY = self.next_coord(y)
 
         exit = False
-        if self.board[y][x] == 0:
+        if self.board[y][x] == self.UNDETERMINED_VALUE:
             i = 0
             while (i < self.BOARD_SIZE and not exit):
                 self.board[y][x] = self.POSSIBLE_VALUES[i]
@@ -96,7 +97,7 @@ class TestBoard(unittest.TestCase):
             [0, 0, 0, 0, 0, 0, 1, 0, 3],
             [0, 0, 0, 0, 0, 0, 0, 0, 2],
             [0, 0, 0, 0, 0, 0, 0, 0, 1]])
-        self.solveable = SudokuBoard([
+        self.solveable_1 = SudokuBoard([
             [1, 0, 0, 0, 0, 7, 0, 0, 0],
             [0, 0, 0, 0, 2, 0, 0, 0, 5],
             [0, 6, 9, 0, 0, 0, 0, 0, 2],
@@ -126,7 +127,7 @@ class TestBoard(unittest.TestCase):
             1, 2, 3, 0, 0, 0]))
 
     def test_solve(self):
-        self.assertEqual(self.solveable.solve(), [
+        self.assertEqual(self.solveable_1.solve(), [
             [1, 2, 4, 5, 8, 7, 3, 6, 9],
             [3, 8, 7, 9, 2, 6, 1, 4, 5],
             [5, 6, 9, 1, 3, 4, 7, 8, 2],
