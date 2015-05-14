@@ -22,17 +22,30 @@ class SudokuBoard(object):
 
     def recurse(self, y, x):
         if (y == self.BOARD_INDEX and x == self.BOARD_INDEX):
-            return True
-        nextX, nextY = self.next_coord(x), self.next_coord(y)
-        i = 0
+            for i in self.POSSIBLE_VALUES:
+                self.board[y][x] = i
+                if self.is_valid(y, x):
+                    return True
+            return False
+
+        nextX = self.next_coord(x)
+        nextY = y
+        if nextX == 0:
+            nextY = self.next_coord(y)
+
         exit = False
-        while (i < self.BOARD_SIZE and not exit):
-            self.board[y][x] = self.POSSIBLE_VALUES[i]
-            if self.is_valid(y, x):
-                exit = self.recurse(nextY, nextX)
-            i += 1
-        self.board[y][x] = self.UNDETERMINED_VALUE
-        return False
+        if self.board[y][x] == 0:
+            i = 0
+            while (i < self.BOARD_SIZE and not exit):
+                self.board[y][x] = self.POSSIBLE_VALUES[i]
+                if self.is_valid(y, x):
+                    exit = self.recurse(nextY, nextX)
+                i += 1
+            if not exit:
+                self.board[y][x] = self.UNDETERMINED_VALUE
+        else:
+            exit = self.recurse(nextY, nextX)
+        return exit
 
     @classmethod
     def next_coord(cls, coord):
