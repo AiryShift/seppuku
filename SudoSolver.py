@@ -40,14 +40,24 @@ class SudokuBoard(object):
 
     def is_valid(self, y, x):
         row = (i for i in self.board[y])
-        col = (self.board[i][x] for i in range(0, self.BOARD_SIZE))
-        box = (i for i in 0)  # TODO
+        col = (self.board[i][x] for i in range(self.BOARD_SIZE))
+        box = (self.board[i][j]
+               for i in self.find_box(y) for j in self.find_box(x))
         for generator in (row, col, box):
             if not self.all_unique(generator):
                 return False
         return True
 
     @staticmethod
+    def find_box(coord):
+        box = coord // 3
+        if box == 0:
+            return range(0, 3)
+        elif box == 1:
+            return range(3, 6)
+        elif box == 2:
+            return range(6, 9)
+
     @classmethod
     def all_unique(cls, generator):
         occurences = set()
